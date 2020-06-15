@@ -20,6 +20,20 @@ app.get('/categorias', (req, res, next) => {
     });
 });
 
+app.get('/productos', (req, res, next) => {
+    client.query('SELECT * FROM productos ORDER BY nombreproducto', (err, result) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send(err);
+        }
+        res.status(200).json(result.rows);
+    });
+});
+
+
+
+
+
 app.listen('8010', () => {
     console.log('Listening on port 8010')
 })

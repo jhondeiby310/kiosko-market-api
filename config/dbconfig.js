@@ -2,7 +2,7 @@ const db = {
     host: 'localhost',
     port: '5432',
     username: 'postgres',
-    password: '123fenix',
+    password: '2020',
     dbname: 'kioskomarket'
 }
 
