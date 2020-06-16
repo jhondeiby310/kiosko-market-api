@@ -20,8 +20,8 @@ app.get('/categorias', (req, res, next) => {
     });
 });
 
-app.get('/productos', (req, res, next) => {
-    client.query('SELECT * FROM productos ORDER BY nombreproducto', (err, result) => {
+app.get('/categorias/productos/:id', (req, res, next) => {
+    client.query('SELECT p.codigo,p.image, p.nombreproducto, p.descripcion, p.precio FROM categorias c INNER JOIN productos p ON  c.id = p.idproductocategoria WHERE c.id = $1 ORDER BY nombreproducto', [req.params.id],(err, result) => {
         if(err) {
             console.error(err);
             res.status(500).send(err);
@@ -29,10 +29,6 @@ app.get('/productos', (req, res, next) => {
         res.status(200).json(result.rows);
     });
 });
-
-
-
-
 
 app.listen('8010', () => {
     console.log('Listening on port 8010')
