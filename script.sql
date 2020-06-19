@@ -44,3 +44,7 @@ INSERT INTO productos VALUES (6, 'Satanas', 'https://cdn.pixabay.com/photo/2016/
 INSERT INTO productos VALUES (7, 'Cicla', 'https://cdn.pixabay.com/photo/2017/09/20/15/49/bike-2769021_960_720.jpg', 'Cicla Electrica', 100000, 5);
 INSERT INTO productos VALUES (8, 'Antivirus', 'https://cdn.pixabay.com/photo/2014/02/13/07/28/security-265130_960_720.jpg', 'El mejor del mercado', 46000, 3);
 INSERT INTO productos VALUES (9, 'Cobija', 'https://cdn.pixabay.com/photo/2015/06/08/15/02/pug-801826_960_720.jpg', 'Para tu perrito', 6000, 60);
+
+create sequence producto;
+alter table productos alter codigo set default nextval('producto');
+
