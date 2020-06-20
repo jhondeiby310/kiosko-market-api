@@ -21,6 +21,7 @@ app.get('/categorias', (req, res, next) => {
     });
 });
 
+
 app.get('/categorias/productos/:id', (req, res, next) => {
     client.query('SELECT p.codigo,p.image, p.nombreproducto, p.descripcion, p.precio FROM categorias c INNER JOIN productos p ON  c.id = p.idproductocategoria WHERE c.id = $1 ORDER BY nombreproducto', [req.params.id],(err, result) => {
         if(err) {
@@ -51,8 +52,8 @@ app.get('/productos/:id', (req, res, net) => {
     });
 });
 
-app.post('/productos', (req, res, net) => {
-    client.query(`insert into productos (nombreproducto, precio, descripcion) values ('${req.body.nombreproducto}', ${req.body.precio}, '${req.body.descripcion}')`, (err, result) => {
+app.post('/productos', (req, res, next) => {
+    client.query(`INSERT INTO productos (nombreproducto, precio, descripcion, idproductocategoria, image) VALUES ('${req.body.nombreproducto}', '${req.body.precio}', '${req.body.descripcion}', ${req.body.idproductocategoria}, '${req.body.image}')`, (err, result) => {
         if(err) {
             console.error(err);
             res.status(500).send(err);
@@ -72,7 +73,7 @@ app.delete('/productos/:id', (req, res, net) => {
 });
 
 app.put('/productos', (req, res, net) => {
-    client.query(`update productos set nombreproducto = '${req.body.nombreproducto}', precio = ${req.body.precio}, descripcion = '${req.body.descripcion}' WHERE codigo = ${req.body.codigo}`, (err, result) => {
+    client.query(`update productos set nombreproducto = '${req.body.nombreproducto}', precio = '${req.body.precio}', descripcion = '${req.body.descripcion}' , image = '${req.body.image}', idproductocategoria = ${req.body.idproductocategoria} WHERE codigo = ${req.body.codigo}`, (err, result) => {
         if(err) {
             console.error(err);
             res.status(500).send(err);
