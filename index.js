@@ -52,7 +52,7 @@ app.get('/productos/:id', (req, res, net) => {
 });
 
 app.post('/productos', (req, res, net) => {
-    client.query(`insert into productos (nombreproducto, precio, descripcion) values ('${req.body.nombreproducto}', ${req.body.precio}, '${req.body.descripcion}')`, (err, result) => {
+    client.query(`insert into productos (nombreProducto, precio, descripcion) values ('${req.body.nombreproducto}', ${req.body.precio}, '${req.body.descripcion}')`, (err, result) => {
         if(err) {
             console.error(err);
             res.status(500).send(err);
