@@ -112,7 +112,7 @@ app.put('/productos', (req, res, net) => {
 });
 
 app.put('/categorias', (req, res, net) => {
-    client.query(`update categorias set nombre = '${req.body.nombre}', image = '${req.body.image}', descripcion = '${req.body.descripcion}', id = ${req.body.id}, WHERE id = ${req.body.id}`, (err, result) => {
+    client.query(`update categorias set nombre = '${req.body.nombre}', image = '${req.body.image}', descripcion = '${req.body.descripcion}' WHERE id = ${req.body.id}`, (err, result) => {
         if(err) {
             console.error(err);
             res.status(500).send(err);
