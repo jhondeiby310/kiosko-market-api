@@ -74,6 +74,17 @@ app.get("/productos/:id", (req, res, net) => {
   );
 });
 
+app.get('/comprar/:codigo', (req, res, next) => {
+    client.query(`SELECT image, nombreproducto, descripcion, precio  FROM productos WHERE codigo = ${req.params.codigo}`, (err, result) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send(err);
+        }
+        res.status(200).json(result.rows);
+    });
+});
+
+
 app.post("/productos", (req, res, next) => {
   client.query(
     `INSERT INTO productos (nombreproducto, precio, descripcion, idproductocategoria, image) VALUES ('${req.body.nombreproducto}', '${req.body.precio}', '${req.body.descripcion}', '${req.body.idproductocategoria}', '${req.body.image}')`,
