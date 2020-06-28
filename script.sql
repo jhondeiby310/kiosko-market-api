@@ -1,8 +1,10 @@
 CREATE TABLE usuarios(
 	id number PRIMARY KEY,
-	username VARCHAR (50) UNIQUE NOT NULL,
-	password VARCHAR (50) NOT NULL,
-	created_at TIMESTAMP
+	nombre VARCHAR (50) NOT NULL,
+	apellido VARCHAR (50) NOT NULL,
+	correo VARCHAR (100) UNIQUE NOT NULL,
+	contrasena VARCHAR (50) NOT NULL,
+	rol number NOT NULL	
 );
 
 CREATE TABLE categorias(
