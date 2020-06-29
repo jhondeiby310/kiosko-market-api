@@ -80,7 +80,7 @@ app.get('/comprar/:codigo', (req, res, next) => {
             console.error(err);
             res.status(500).send(err);
         }
-        res.status(200).json(result.rows);
+        res.status(200).json(result.rows[0]);
     });
 });
 
