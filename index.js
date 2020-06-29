@@ -137,6 +137,17 @@ app.post("/usuarios", (req, res, next) => {
   );
 });
 
+
+app.post('/login', (req, res, next) => {
+  client.query(`SELECT u.nombre, u.apellido, u.correo, u.contrasena FROM usuarios u WHERE u.correo = '${req.body.correo}' AND u.contrasena = '${req.body.contrasena}'`, (err, result) => {
+      if(err) {
+          console.error(err);
+          res.status(500).send(err);
+      }
+      res.status(200).json(result ? result.rows[0] : result);
+  });
+});
+
 app.listen("8010", () => {
   console.log("Listening on port 8010");
 });
