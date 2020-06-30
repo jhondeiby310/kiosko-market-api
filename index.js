@@ -93,7 +93,7 @@ app.get('/comprar/:codigo', (req, res, next) => {
 
 app.post("/productos", (req, res, next) => {
   client.query(
-    `INSERT INTO productos (nombreproducto, precio, descripcion, idproductocategoria, image) VALUES ('${req.body.nombreproducto}', '${req.body.precio}', '${req.body.descripcion}', '${req.body.idproductocategoria}', '${req.body.image}')`,
+    `INSERT INTO productos (nombreproducto, precio, descripcion, idproductocategoria, image) VALUES ('${req.body.nombreproducto}', ${req.body.precio}, '${req.body.descripcion}', '${req.body.idproductocategoria}', '${req.body.image}')`,
     (err, result) => {
       if (err) {
         console.error(err);
