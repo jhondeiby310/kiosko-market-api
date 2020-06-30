@@ -1,12 +1,18 @@
 const client = require("./client/clientdb");
-
+const nJwt = require('njwt');
 const express = require("express");
 const cors = require("cors");
 const app = express();
 const bodyParser = require("body-parser");
+const KEY = 'kenfenkfnkefnkef';
+const bearerToken = require('express-bearer-token');
 
 app.use(express.json()); // <==== parse request body as JSON
-app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:4200'}))
+  app.use(bodyParser.json())
+  //.use(cookieParser())
+  app.use(bearerToken());
+
 app.get("/login", (req, res, next) => {
   res.json({ usuario: "juan" });
 });
@@ -91,24 +97,34 @@ app.post("/productos", (req, res, next) => {
     (err, result) => {
       if (err) {
         console.error(err);
-        res, status(500).send(err);
+        res.status(500).send(err);
       }
       res.status(200).json(result.rows);
     }
   );
 });
 
-app.delete("/productos/:id", (req, res, net) => {
-  client.query(
-    `DELETE FROM productos WHERE codigo = ${req.params.id}`,
-    (err, result) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send(err);
-      }
-      res.status(200).json(result.rows);
+app.delete("/productos/:id", (req, res, next) => {
+  if (!req.header('Authorization')) {
+    return res.status(403).send({ auth: false, message: 'No token provided' });
+  }
+  let sub = req.header('Authorization').split(' ')
+  let token = sub[1];
+  nJwt.verify(token, KEY, function(err) {
+    if (err) {
+      return res.status(403).send({ auth: false, message: err });
     }
-  );
+    client.query(
+      `DELETE FROM productos WHERE codigo = ${req.params.id}`,
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send(err);
+        }
+        res.status(200).json({result: result.rows, auth: true});
+      }
+    );
+  });
 });
 
 app.put("/productos", (req, res, net) => {
@@ -126,11 +142,11 @@ app.put("/productos", (req, res, net) => {
 
 app.post("/usuarios", (req, res, next) => {
   client.query(
-    `INSERT INTO usuarios (nombre, apellido, correo, contrasena, rol) VALUES ('${req.body.nombre}', '${req.body.apellido}', '${req.body.correo}', '${req.body.contrasena}','${req.body.rol}')`,
+    `INSERT INTO usuarios (nombre, apellido, correo, contrasena) VALUES ('${req.body.nombre}', '${req.body.apellido}', '${req.body.correo}', '${req.body.contrasena}')`,
     (err, result) => {
       if (err) {
         console.error(err);
-        res, status(500).send(err);
+        res.status(500).send(err);
       }
       res.status(200).json(result.rows);
     }
@@ -144,7 +160,10 @@ app.post('/login', (req, res, next) => {
           console.error(err);
           res.status(500).send(err);
       }
-      res.status(200).json(result ? result.rows[0] : result);
+      let jwt = nJwt.create({}, KEY);
+      jwt.setExpiration(new Date().getTime() + (2 * 60 * 1000));
+      jwt.setNotBefore(0);
+      res.status(200).json({result : result.rows[0], token: jwt.compact()})
   });
 });
 
